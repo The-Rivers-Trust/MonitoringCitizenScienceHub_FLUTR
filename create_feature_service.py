@@ -22,14 +22,16 @@ from ea_water_qual_archives_sample_history_2 import EAWaterQualSampleArchives2
 from ea_water_qual_archives_sample_history_3 import EAWaterQualSampleArchives3
 from ea_water_qual_archives_sample_history_1_yorkshire import EAWaterQualSampleArchives1Yorkshire
 from ea_water_qual_archives_sample_history_2_yorkshire import EAWaterQualSampleArchives2Yorkshire
+from ea_hydrology_water_qual import EAHydrologyWQ
+from ea_hydrology_flow import EAHydrologyFlow
 from nbnatlas_occurrences import NBNatlasOccurrences
 
 
 USAGE = f"Usage: python {sys.argv[0]} <datasource> <dataobject> <username> <password>"
-valid_datasource = ["EA_survey_sites", "EA_water_qual_archives", "NBNatlas_occurrences"]
+valid_datasource = ["EA_survey_sites", "EA_water_qual_archives", "EA_hydrology", "NBNatlas_occurrences"]
 valid_EA_survey_sites_dataobject = ["biosys", "biosys_history", "biosys_odm", "fish", "fish_history", "fish_history2"]
 valid_EA_water_qual_archives_dataobject = ["sampling_points", "sampling_history", "sampling_history_2", "sampling_history_3", "sampling_history_1_yorkshire", "sampling_history_2_yorkshire"]
-
+valid_EA_hydrology_dataobject = ["stations", "water_qual", "flow"]
 
 @dataclasses.dataclass  # See e.g. at https://realpython.com/python-kwargs-and-args/
 class Arguments:
@@ -122,6 +124,10 @@ def create_f_service(args):
         and args.dataobject == "sampling_history_2_yorkshire"
     ):
         geodata_obj = EAWaterQualSampleArchives2Yorkshire(args.datasource, args.dataobject, user_obj)
+    elif args.datasource == "EA_hydrology" and args.dataobject == "flow":
+        geodata_obj = EAHydrologyFlow(args.datasource, args.dataobject, user_obj)
+    elif args.datasource == "EA_hydrology" and args.dataobject == "water_qual":
+        geodata_obj = EAHydrologyWQ(args.datasource, args.dataobject, user_obj)
     elif args.datasource == "NBNatlas_occurrences":
         geodata_obj = NBNatlasOccurrences(args.datasource, args.dataobject, user_obj)
     else:
